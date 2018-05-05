@@ -50,7 +50,7 @@ def detectLanesFrame(original, debug=False):
 	if (debug):
 		cv2.imwrite(debug_dir + "/edges.png", edges);
 
-	detectLanes_contour(frame, edges, debug=False);
+	detectLanes_contour(frame, edges, debug);
 
 # Detects the lane using colour
 # Assumes frame is colour
@@ -116,6 +116,7 @@ def detectLanes_frameColour(frame, debug=False):
 		counter += 1;
 
 	output = cv2.cvtColor(output, cv2.COLOR_BGR2GRAY);
+	output = cv2.threshold(output, 20, 255, cv2.THRESH_BINARY)[1];
 
 	if (debug):
 		cv2.imwrite(debug_dir + "/laneColour.png", output);
