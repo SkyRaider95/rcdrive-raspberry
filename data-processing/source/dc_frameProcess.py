@@ -6,9 +6,47 @@ import imutils;
 
 debug_dir = "debug";
 
+def detectLanesVid(input_filename, output_filename, debug=False):
+	# Reading the file
+	original = cv2.VideoCapture(input_filename);
 
-# def detectLanesVid(input_filename, output_filename="", debug=False):
-	# Needs work
+	if (original is None):
+		print("ERROR! Unable to read file: " + str(input_filename));
+		return;
+	elif (output_filename is None):
+		print("ERROR! No output filename specified");
+		return;
+
+	# Getting video properties
+	fps = int(original.get(cv2.CAP_PROP_FPS));
+	height = int(original.get(cv2.CAP_PROP_FRAME_HEIGHT));
+	height = round(height/2);
+	width = int(original.get(cv2.CAP_PROP_FRAME_WIDTH));
+
+	print("Resolution of new video: " + str(width) + "x" + str(height));
+
+	# Creating output file if specified
+	fourcc = cv2.VideoWriter_fourcc(*'XVID');
+	output = cv2.VideoWriter(output_filename, fourcc, fps, (width, height));
+
+	ret = True;
+	# Processing
+	while(original.isOpened() and ret):
+		ret, frame = original.read();
+
+		if (ret == True):
+			frame = detectLanesFrame(frame);
+
+			output.write(frame);
+			cv2.imshow('frame', frame);
+
+			if cv2.waitKey(1) & 0xFF == ord('q'):
+				break;
+
+	original.release();
+	output.release();
+	cv2.destroyAllWindows();
+	print("Finished processing " + str(input_filename));
 
 ### detectLanes
 # Detects the lanes of an image
@@ -41,7 +79,7 @@ def detectLanesFrame(original, debug=False):
 		return;
 
 	(height, width, size) = original.shape;
-	frame = original[round(height/2):height-1, 0:width-1];
+	frame = original[round(height/2):height, 0:width];
 
 	if (debug):
 		cv2.imwrite(debug_dir + "/cropped.png", frame);
@@ -53,7 +91,8 @@ def detectLanesFrame(original, debug=False):
 	if (debug):
 		cv2.imwrite(debug_dir + "/edges.png", edges);
 
-	detectLanes_contour(frame, edges, debug);
+	contour = detectLanes_contour(frame, edges, debug);
+	return contour;
 
 # Detects the lane using colour
 # Assumes frame is colour
@@ -173,7 +212,7 @@ def detectLanes_contour(frame, edges, debug=False):
 
 	# Approximate shape from contours
 	tempFrame = copy.deepcopy(frame);
-	
+
 	for cnt in contours:
 		approx = cv2.approxPolyDP(cnt, 0.01*cv2.arcLength(cnt,True), True);
 
@@ -189,12 +228,13 @@ def detectLanes_contour(frame, edges, debug=False):
 	if (debug):
 		cv2.imwrite(debug_dir + "/contour_edges_boxes.png", tempFrame);
 
-	# Hough Line Transform Probabilistic
-	tempFrame = copy.deepcopy(frame);
-	lines = cv2.HoughLinesP(edges, 2, np.pi/180, 200, minLineLength=200, maxLineGap=50);
-	for line in lines:
-		x1,y1,x2,y2 = line[0];
-		cv2.line(tempFrame, (x1,y1), (x2,y2), (0,255,0), 2);
+	# # Hough Line Transform Probabilistic
+	# tempFrame = copy.deepcopy(frame);
+	# lines = cv2.HoughLinesP(edges, 2, np.pi/180, 200, minLineLength=200, maxLineGap=50);
+	# for line in lines:
+	# 	x1,y1,x2,y2 = line[0];
+	# 	cv2.line(tempFrame, (x1,y1), (x2,y2), (0,255,0), 2);
 
-	if (debug):
-		cv2.imwrite(debug_dir + "/houghlinesP.png", tempFrame);
+	# if (debug):
+	# 	cv2.imwrite(debug_dir + "/houghlinesP.png", tempFrame);
+	return tempFrame;
