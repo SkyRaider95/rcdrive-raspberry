@@ -43,6 +43,9 @@ def detectLanesFrame(original, debug=False):
 	(height, width, size) = original.shape;
 	frame = original[round(height/2):height-1, 0:width-1];
 
+	if (debug):
+		cv2.imwrite(debug_dir + "/cropped.png", frame);
+
 	colour = detectLanes_frameColour(frame, debug);
 	canny = detectLanes_frameCanny(frame, debug);
 
@@ -137,7 +140,7 @@ def detectLanes_frameCanny(frame, debug=False):
 
 	# Smoothing the image
 	canny = copy.deepcopy(grey);
-	canny = cv2.medianBlur(canny, 3);
+	# canny = cv2.medianBlur(canny, 3);
 	canny = cv2.GaussianBlur(canny,(7, 7), 0);
 
 	if (debug):
@@ -162,7 +165,7 @@ def detectLanes_contour(frame, edges, debug=False):
 
 	# Contours using edges
 	tempFrame = copy.deepcopy(frame);
-	im2, contours, hierarchy = cv2.findContours(edges, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE);
+	im2, contours, hierarchy = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE);
 	cv2.drawContours(tempFrame, contours, -1, (0,255,0), 3); # Draws all the contours
 
 	if (debug):
@@ -170,10 +173,11 @@ def detectLanes_contour(frame, edges, debug=False):
 
 	# Approximate shape from contours
 	tempFrame = copy.deepcopy(frame);
+	
 	for cnt in contours:
 		approx = cv2.approxPolyDP(cnt, 0.01*cv2.arcLength(cnt,True), True);
 
-		if (len(approx) > 4):
+		if (len(approx) >= 2 and cv2.arcLength(cnt,True) > 100):
 			# cv2.drawContours(tempFrame,[cnt],0,(0,0,255),-1);
 
 			# Bounding boxes
@@ -183,33 +187,14 @@ def detectLanes_contour(frame, edges, debug=False):
 			cv2.drawContours(tempFrame,[box],0,(0,0,255),2);
 
 	if (debug):
-		cv2.imwrite(debug_dir + "/contour_edges_approx.png", tempFrame);
-
-	# Hough Line Transform
-	tempFrame = copy.deepcopy(frame);
-	lines = cv2.HoughLines(edges, 1, np.pi/180, 200);
-	for rho, theta in lines[0]:
-	    a = np.cos(theta);
-	    b = np.sin(theta);
-	    x0 = a*rho;
-	    y0 = b*rho;
-	    x1 = int(x0 + 1000*(-b));
-	    y1 = int(y0 + 1000*(a));
-	    x2 = int(x0 - 1000*(-b));
-	    y2 = int(y0 - 1000*(a));
-
-	    cv2.line(tempFrame,(x1,y1),(x2,y2),(0,0,255),2);
-
-	if (debug):
-		cv2.imwrite(debug_dir + "/houghlines.png", tempFrame);
+		cv2.imwrite(debug_dir + "/contour_edges_boxes.png", tempFrame);
 
 	# Hough Line Transform Probabilistic
 	tempFrame = copy.deepcopy(frame);
-	lines = cv2.HoughLinesP(edges, 5, np.pi/180, 100, minLineLength=100, maxLineGap=20);
+	lines = cv2.HoughLinesP(edges, 2, np.pi/180, 200, minLineLength=200, maxLineGap=50);
 	for line in lines:
 		x1,y1,x2,y2 = line[0];
 		cv2.line(tempFrame, (x1,y1), (x2,y2), (0,255,0), 2);
 
 	if (debug):
 		cv2.imwrite(debug_dir + "/houghlinesP.png", tempFrame);
-	
