@@ -22,9 +22,40 @@ To reinforce our knowledge of electronics, machine learning and image processing
 - [ ] Prepare data for inputs for TensorFlow
 - [ ] Implement model onto Raspberry Pi
 
-# References
-## Open Source Libraries
-- OpenCV
+## Lane Detection
 
-## Neural Networks
-- TensorFlow
+There are two approaches to lane detection:
+- Detection of shape (Object Detection)
+- Detection of colour (Colour Space)
+
+### Detection of colour
+
+To select the road markings using colour, we convert the original image frame into HSV Colourspace. In OpenCV, the HSV parameters goes as follows:
+-	H: 0 - 180
+-	S: 0 - 255
+-	V: 0 - 255
+
+Since most road markings are white and yellow, the following HSV values are chosen:
+- White: (0, 0, 100)
+- Yellow: (62, 100, 50)
+
+The only problem is that this is highly dependent on the camera colour calibration.
+
+### Detection of shape
+
+With some margin of tolerance due to colour variations in road marking paint, weather, light conditions and camera colour calliberation, each value is given a tolerance of 10%.
+
+# Installation
+
+## pip dependencies
+- numpy
+- scipy
+- matplotlib
+- opencv
+- imutils
+- wiringpi
+
+# References
+- [Optimised OpenCV](https://www.pyimagesearch.com/2017/10/09/optimizing-opencv-on-the-raspberry-pi/)
+- [VideoStream](https://www.pyimagesearch.com/2016/01/04/unifying-picamera-and-cv2-videocapture-into-a-single-class-with-opencv/)
+- [Python library for the Pololu DRV8835 Dual Motor Driver Kit for Raspberry Pi](https://github.com/pololu/drv8835-motor-driver-rpi)
