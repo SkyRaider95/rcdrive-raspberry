@@ -1,5 +1,5 @@
 ### Main Program
-import rcdrivecamera as rc;
-import frameProcess as fp;
+### For deployment
+import rcdrive as rc;
 
 rc.drive();
