@@ -1,6 +1,6 @@
 # Import packages
 from imutils.video import VideoStream;
-import frameProcess as fp;
+from frameProcess import frameProcessObj as fp;
 from pololu_drv8835_rpi import motors, MAX_SPEED
 import imutils;
 import time;
@@ -14,6 +14,9 @@ def drive(usePiCamera=True, resolution=(1648, 1232), fps=30, speedLimit=MAX_SPEE
 	isPiCamera=True;
 	vs = VideoStream(usePiCamera=usePiCamera, resolution=resolution, framerate=fps).start();
 	time.sleep(2.0);
+
+	# Initialise frameProcessObj
+	rccamera = fp("rc-camera", "rc-camera.output", fp.FRAME_PROCESS_CAMERA, resolution, max_fps=fps);
 
 	# Initialise to write to file
 	fourcc = cv2.VideoWriter_fourcc(*'XVID');
