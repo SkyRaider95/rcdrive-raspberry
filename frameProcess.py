@@ -1,4 +1,5 @@
 import numpy as np;
+from PIL import Image
 import copy;
 import cv2;
 import os;
@@ -16,25 +17,48 @@ debug_dir = "debug";
 # CROP: When frame processing, is it okay to crop out non-region of interest?
 class frameProcessObj:
 	# Default Attributes
-	FRAME_PROCESS_CAMERA = "Camera";
-	FRAME_PROCESS_IMAGE = "Image";
-	FRAME_PROCESS_VIDEO = "Video";
+	FRAME_PROCESS_STREAM_CAMERA = "Camera";
+	FRAME_PROCESS_FILE_IMAGE = "Image";
+	FRAME_PROCESS_FILE_VIDEO = "Video";
+	FRAME_PROCESS_IMAGE_FRAME = "FRAME";
 
-	def __init__(self, name, output="", type=FRAME_PROCESS_IMAGE, resolution=(1648, 1232), rescale=True, crop=True, max_fps=-1):
+	roi_resolution = (128, 128);
+
+	def __init__(self, name, objType, output="", resolution=(1648, 1232), rescale=True, crop=False, max_fps=-1, only_lower=False):
 		self.NAME = name;
 		self.OUTPUT = output;
-		self.TYPE=type
+		self.TYPE = objType;
 		self.RESOLUTION = resolution;
 		self.RESCALE = rescale;
 		self.CROP = crop;
+		self.USE_ROI_VERTICES = False;
 		self.ROI_VERTICES = ((0,0), (resolution[0], 0), (resolution[0], resolution[1]), (0, resolution[1]));
 		self.MAX_FPS = max_fps;
+		self.ONLY_LOWER = only_lower;
+
+	# User manually sets desired ROI
+	def ROI_crop(self, frame):
+		s = cv2.selectROI(frame);
+		r = [0, 0, 0, 0];
+		cv2.destroyAllWindows();
+
+		# Must be even numbers
+		for x in range(0,3):
+			print(str(x));
+			r[x] = s[x] + s[x] % 2;
+
+		top_left = (int(r[0]), int(r[1]));
+		bottom_left =  (int(r[0]), int(r[3]));
+		bottom_right = (int(r[2]), int(r[3]));
+		top_right = (int(r[2]), int(r[1]));
+		self.setROI_vertices(top_left, bottom_left, bottom_right, top_right);
 
 	# Sets the Region of Interest vertices
 	# It will isolate your region of interest in a trapezoid shape (possible to be a rectangle/square)
 	# Assumes all values are correct
 	def setROI_vertices(self, top_left, bottom_left, bottom_right, top_right):
 		self.ROI_VERTICES = (top_left, bottom_left, bottom_right, top_right);
+		self.USE_ROI_VERTICES = True;
 
 	# Sets the max fps for the output video
 	def setMaxFPS(self, max_fps):
@@ -49,17 +73,26 @@ class frameProcessObj:
 		print("Resolution: " + str(self.RESOLUTION[0]) + ' x ' + str(self.RESOLUTION[1]));
 		print("Rescale: " + str(self.RESCALE));
 		print("Crop: " + str(self.CROP));
-		print("ROI Vertices: " + str(self.ROI_VERTICES));
+		if (self.USE_ROI_VERTICES):
+			print("ROI Vertices: " + str(self.ROI_VERTICES));
 		if (self.MAX_FPS > 0):
 			print("FPS: " + str(self.MAX_FPS));
+		print("Lower half only when processing frame: " + str(self.ONLY_LOWER));
 
-	# Detects lane from a file
-	# Will display the output if specified
-	def detectLanesFile(self, debug=False, display=False):
-		if (self.TYPE == self.FRAME_PROCESS_IMAGE):
+	## Function: detectLanes
+	# Detect lanes based on object's properties
+	# Will display output if specified
+	def detectLanes(self, frame=None, debug=False, display=False):
+		if (self.TYPE == self.FRAME_PROCESS_FILE_IMAGE):
 			self.detectLanesImg(debug, display);
-		elif (self.TYPE == self.FRAME_PROCESS_VIDEO):
+		elif (self.TYPE == self.FRAME_PROCESS_FILE_VIDEO):
 			self.detectLanesVid(debug, display);
+		elif (frame.any() != None and self.TYPE == self.FRAME_PROCESS_IMAGE_FRAME):
+			print("Entering frame");
+			output = self.detectLanesFrame(frame, debug);
+			if (self.OUTPUT != ""):
+				cv2.imwrite(self.OUTPUT, output);
+			return output;
 		else:
 			print("ERROR! Wrong type!");
 
@@ -74,40 +107,39 @@ class frameProcessObj:
 			print("ERROR! No output video file specified");
 			return;
 
-		# Getting video properties
+		# Getting video properties from first frame and video
 		fps = int(original.get(cv2.CAP_PROP_FPS));
-		height = int(original.get(cv2.CAP_PROP_FRAME_HEIGHT));
-		width = int(original.get(cv2.CAP_PROP_FRAME_WIDTH));
+		ret, frame = original.read();
+		frame = self.detectLanesFrame(frame);
+		height, width, channels = frame.shape;
 
-		# Setting new values if not specified
+		# Setting output values if not specified
 		if (self.RESOLUTION != (width, height)):
 			self.RESOLUTION = (width, height);
-			print("Setting new resolution of object to " + str(self.RESOLUTION));
+			print("Setting output resolution to " + str(self.RESOLUTION));
 
 		if (self.MAX_FPS > 0):
 			fps = self.MAX_FPS;
 		else:
 			self.MAX_FPS = fps;
-			print("Setting new fps to " + str(self.MAX_FPS));
+			print("Setting output fps to " + str(self.MAX_FPS));
 
 		# Creating output file if specified
 		fourcc = cv2.VideoWriter_fourcc(*'XVID');
 		output = cv2.VideoWriter(self.OUTPUT, fourcc, fps, (width, height));
 
-		ret = True;
 		# Processing
 		while(original.isOpened() and ret):
-			ret, frame = original.read();
+			frame = self.detectLanesFrame(frame);
+			output.write(frame);
 
-			if (ret == True):
-				frame = self.detectLanesFrame(frame);
-				output.write(frame);
+			# Display frames if specified
+			if (display):
+				cv2.imshow('frame', frame);
+				if cv2.waitKey(1) & 0xFF == ord('q'):
+					break;
 
-				# Display frames if specified
-				if (display):
-					cv2.imshow('frame', frame);
-					if cv2.waitKey(1) & 0xFF == ord('q'):
-						break;
+			ret, frame = original.read(); # Getting next frame
 
 		original.release();
 		output.release();
@@ -138,6 +170,7 @@ class frameProcessObj:
 		# Display frame if specified
 		if (display):
 			cv2.imshow('Image', output);
+			cv2.waitKey(0);
 		print("Finished processing image " + str(self.NAME));
 
 	### Function: detectLanesFrame
@@ -149,16 +182,34 @@ class frameProcessObj:
 			return;
 
 		(height, width, size) = original.shape;
-		# frame = original[round(height/2):height, 0:width];
 		frame = copy.deepcopy(original);
 
+		# Getting ROI
+		if (self.ONLY_LOWER):
+			frame = original[round(height/2):height, 0:width];
+
+		if (self.CROP):
+			self.ROI_crop(frame);
+			self.CROP = False;
+			height, width, channels = frame.shape;
+			self.RESOLUTION = (width, height);
+
+		if (self.USE_ROI_VERTICES):
+			top_left, bottom_left, bottom_right, top_right = self.ROI_VERTICES;
+			frame = frame[top_left[1]:top_left[1] + bottom_right[1], top_left[0]:top_left[0] + bottom_right[0]];
+
 		if (debug):
+			if (not os.path.exists(debug_dir)):
+				os.makedirs(debug_dir);
 			cv2.imwrite(debug_dir + "/cropped.png", frame);
 
-		colour = self.detectLanes_frameColour(frame, debug);
+			# frameCropped = frame[int(r[1]):int(r[1]+r[3]), int(r[0]):int(r[0]+r[2])];
+
+		# colour = self.detectLanes_frameColour(frame, debug);
 		canny = self.detectLanes_frameCanny(frame, debug);
 
-		edges = colour + canny;
+		# edges = colour + canny;
+		edges = canny;
 		if (debug):
 			cv2.imwrite(debug_dir + "/edges.png", edges);
 
@@ -220,12 +271,13 @@ class frameProcessObj:
 		 
 			# find the colors within the specified boundaries and apply
 			# the mask
-			mask = cv2.inRange(tempFrame, lower, upper);
-			hsv = cv2.bitwise_and(tempFrame, tempFrame, mask = mask);
 
-			if (debug):
-				cv2.imwrite(debug_dir + "/hsv_colour" + str(counter) + ".png", hsv);
-			output += hsv;
+			if (len(lower) == len(upper)):
+				mask = cv2.inRange(tempFrame, lower, upper);
+				hsv = cv2.bitwise_and(tempFrame, tempFrame, mask = mask);
+				output += hsv;
+				if (debug):
+					cv2.imwrite(debug_dir + "/hsv_colour" + str(counter) + ".png", hsv);
 			counter += 1;
 
 		output = cv2.cvtColor(output, cv2.COLOR_BGR2GRAY);
