@@ -3,5 +3,5 @@
 
 import rcdrive as rc;
 
-# rc.drive();
-rc.stop();
+rc.drive(display=False);
+# rc.stop();
