@@ -17,7 +17,7 @@ else:
 	from Queue import Queue
 
 class piStream:
-	def __init__(self, name="", resolution=(320,240), fps=30):
+	def __init__(self, name="", resolution=(320,240), fps=30, queueSize=30):
 		# Initialise camera properties
 		self.name = name;
 		self.resolution = resolution;
@@ -35,9 +35,7 @@ class piStream:
 		self.vs = VideoStream(usePiCamera=True, resolution=resolution, framerate=fps).start();
 		print("Initializing PiCamera " + str(name));
 
-		# initialize the queue used to store frames read from
-		# the video file
-		queueSize = 128; # May need to change in the future
+		# Initialize the queue used to store frames
 		self.Q = Queue(maxsize=queueSize)
 
 		time.sleep(2.0);
@@ -71,15 +69,13 @@ class piStream:
 		self.isStream = False;
 		self._end = datetime.datetime.now();
 		
-		print("End streaming");
-
 	def read(self):
 		self.frames_read += 1;
 		return self.Q.get(), self.frames_read;
 
 	# return True if there are still frames in the queue
 	def more(self):
-		return self.Q.qsize() > 0
+		return self.Q.qsize() > 0;
 
 	# Prints all the statistics of a given piStream object
 	def stats(self):

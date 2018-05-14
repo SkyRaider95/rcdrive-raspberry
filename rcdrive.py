@@ -2,6 +2,7 @@
 from __future__ import print_function
 from imutils.video import VideoStream;
 from frameProcess import frameProcessObj as fp;
+from outputProcess import outputFrame
 from pololu_drv8835_rpi import motors, MAX_SPEED
 from threading import Thread
 from piStream import piStream
@@ -29,11 +30,7 @@ def drive(usePiCamera=True, resolution=(1648, 1232), fps=30, display=False, dete
 	global eventLoop, forwardSpd, turningSpd, char;
 	eventLoop = True;
 	char = "";
-	output_dir = "output"
-
-	# Initialize the video stream and allow the camera sensor to warmup
-	camera = piStream(name="PiCamera", resolution=resolution, fps=fps);
-	camera.start();
+	output_dir = "output";
 
 	# Initialise frameProcessObj
 	rccamera = fp("rc-camera", "rc-camera.output", fp.FRAME_PROCESS_STREAM_CAMERA, resolution, max_fps=fps);
@@ -42,8 +39,8 @@ def drive(usePiCamera=True, resolution=(1648, 1232), fps=30, display=False, dete
 	if (not os.path.exists(output_dir)):
 		os.makedirs(output_dir);
 
-	fourcc = cv2.VideoWriter_fourcc(*'XVID');
-	out = cv2.VideoWriter(output_dir + "/" + 'output.avi', fourcc, fps, resolution);
+	# fourcc = cv2.VideoWriter_fourcc(*'XVID');
+	# out = cv2.VideoWriter(output_dir + "/" + 'output.avi', fourcc, fps, resolution);
 
 	# Initialise opencv file
 	csvfile = open(output_dir + "/" + 'keyboard.csv', 'w');
@@ -56,20 +53,20 @@ def drive(usePiCamera=True, resolution=(1648, 1232), fps=30, display=False, dete
 	# Assume motor2 is longitudinal (forwards/backwards)
 	motors.setSpeeds(0, 0);
 
-	# Begin thread for keyboard control
-	try:
-		keyboardThread = Thread(target=keyboardLoop, args = ());
-		keyboardThread.daemon = True;
-		keyboardThread.start();
-	except:
-		print("Error: unable to start thread");
-		eventLoop = False;
+	# Initialise keyboard thread
+	keyboardThread = Thread(target=keyboardLoop, args = ());
+	keyboardThread.daemon = True;
 
-	if (eventLoop):
-		print("Beginning stream");
+	# Initialize the video stream
+	camera = piStream(name="PiCamera", resolution=resolution, fps=fps);
+
+	# Begin driving
+	camera.start();
+	keyboardThread.start();
+	print("Begin drive")
 	
 	# Event loop
-	while (eventLoop):
+	while (eventLoop or camera.more()):
 		# Grabbing frame from the video and perform processing
 		(frame, counter) = camera.read();
 
@@ -106,14 +103,15 @@ def drive(usePiCamera=True, resolution=(1648, 1232), fps=30, display=False, dete
 		# 	motors.motor1.setSpeed(0);
 
 		# Saving the frame
-		cv2.imwrite(output_dir + "/" + frameName +'.png', frame);
+		outputFrame(frameName, frame, output_dir);
+		# cv2.imwrite(output_dir + "/" + frameName +'.png', frame);
 		# out.write(frame);
 
 	# Closing Program
 	camera.stats();
 	motors.setSpeeds(0, 0);
 	cv2.destroyAllWindows();
-	out.release();
+	# out.release();
 	csvfile.close();
 	keyboardThread.join();
 
