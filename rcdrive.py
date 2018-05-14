@@ -4,6 +4,7 @@ from imutils.video import VideoStream;
 from frameProcess import frameProcessObj as fp;
 from pololu_drv8835_rpi import motors, MAX_SPEED
 from threading import Thread
+from piStream import piStream
 import os;
 import numpy as np
 import sys;
@@ -22,7 +23,7 @@ turningSpd = MAX_SPEED;
 char = "";
 
 # Main running program for the car
-def drive(usePiCamera=True, resolution=(1648, 1232), fps=10, display=False, detectLanes=False):
+def drive(usePiCamera=True, resolution=(1648, 1232), fps=30, display=False, detectLanes=False):
 	# Initalise variables
 	counter = 1;
 	global eventLoop, forwardSpd, turningSpd, char;
@@ -31,9 +32,8 @@ def drive(usePiCamera=True, resolution=(1648, 1232), fps=10, display=False, dete
 	output_dir = "output"
 
 	# Initialize the video stream and allow the camera sensor to warmup
-	isPiCamera=True;
-	vs = VideoStream(usePiCamera=usePiCamera, resolution=resolution, framerate=fps).start();
-	time.sleep(2.0);
+	camera = piStream(name="PiCamera", resolution=resolution, fps=fps);
+	camera.start();
 
 	# Initialise frameProcessObj
 	rccamera = fp("rc-camera", "rc-camera.output", fp.FRAME_PROCESS_STREAM_CAMERA, resolution, max_fps=fps);
@@ -59,6 +59,7 @@ def drive(usePiCamera=True, resolution=(1648, 1232), fps=10, display=False, dete
 	# Begin thread for keyboard control
 	try:
 		keyboardThread = Thread(target=keyboardLoop, args = ());
+		keyboardThread.daemon = True;
 		keyboardThread.start();
 	except:
 		print("Error: unable to start thread");
@@ -70,7 +71,7 @@ def drive(usePiCamera=True, resolution=(1648, 1232), fps=10, display=False, dete
 	# Event loop
 	while (eventLoop):
 		# Grabbing frame from the video and perform processing
-		frame = vs.read();
+		(frame, counter) = camera.read();
 
 		if (detectLanes):
 			frame = rccamera.detectLanesFrame(frame);
@@ -81,7 +82,7 @@ def drive(usePiCamera=True, resolution=(1648, 1232), fps=10, display=False, dete
 
 		# Getting the timestamp on the frame
 		timestamp = datetime.datetime.now();
-		ts = timestamp.strftime("%d %B %Y %I:%M:%S %p");
+		ts = str(timestamp.strftime("%d %B %Y %I:%M:%S %p"));
 
 		frameName = ts + str(" frameNum ") + str(counter);
 
@@ -94,6 +95,7 @@ def drive(usePiCamera=True, resolution=(1648, 1232), fps=10, display=False, dete
 			if (char == "x"):
 				motors.setSpeeds(0, 0);
 				eventLoop = False;
+				camera.stop();
 
 			# Write to csv file
 			# print('At frame ' + str(counter) + ', writing to file: ' + str(char) + '\n');
@@ -106,13 +108,13 @@ def drive(usePiCamera=True, resolution=(1648, 1232), fps=10, display=False, dete
 		# Saving the frame
 		cv2.imwrite(output_dir + "/" + frameName +'.png', frame);
 		# out.write(frame);
-		counter += 1;
 
 	# Closing Program
+	camera.stats();
 	motors.setSpeeds(0, 0);
 	cv2.destroyAllWindows();
 	out.release();
-	vs.stop();
+	csvfile.close();
 	keyboardThread.join();
 
 	print("End of drive");
