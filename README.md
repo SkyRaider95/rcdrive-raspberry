@@ -54,8 +54,15 @@ With some margin of tolerance due to colour variations in road marking paint, we
 - opencv
 - imutils
 - wiringpi
+- "picamera[array]"
+- Pillow
+- pololu-drv88350-rpi
+- gpiozero
 
 # References
 - [Optimised OpenCV](https://www.pyimagesearch.com/2017/10/09/optimizing-opencv-on-the-raspberry-pi/)
 - [VideoStream](https://www.pyimagesearch.com/2016/01/04/unifying-picamera-and-cv2-videocapture-into-a-single-class-with-opencv/)
 - [Python library for the Pololu DRV8835 Dual Motor Driver Kit for Raspberry Pi](https://github.com/pololu/drv8835-motor-driver-rpi)
+- [Increasing Raspberry Pi Camera FPS](https://www.pyimagesearch.com/2015/12/28/increasing-raspberry-pi-fps-with-python-and-opencv/)
+- [Faster video file FPS](https://www.pyimagesearch.com/2017/02/06/faster-video-file-fps-with-cv2-videocapture-and-opencv/)
+
