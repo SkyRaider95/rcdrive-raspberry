@@ -19,18 +19,17 @@ class outputFrame:
 		self.output_dir = str(output_dir);
 
 		outputStreamThrd = Thread(target=self.save, args=());
-		outputStreamThrd.daemon = True;
+		# outputStreamThrd.daemon = True;
 		outputStreamThrd.start();
 		return;
 
 	def save(self):
 		if (not os.path.exists(self.output_dir)):
-			os.makedirs(output_dir);
+			os.makedirs(self.output_dir);
 		if (self.output_dir != ""):
 			frameName = self.output_dir + "/" + self.filename + '.png';
 		else:
 			frameName = self.filename + '.png';
 
-		# print(frameName);
 		cv2.imwrite(frameName, self.frame);
 		return;

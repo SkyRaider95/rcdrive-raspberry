@@ -57,7 +57,7 @@ With some margin of tolerance due to colour variations in road marking paint, we
 - "picamera[array]"
 - Pillow
 - pololu-drv88350-rpi
-- gpiozero
+- pandas
 
 # References
 - [Optimised OpenCV](https://www.pyimagesearch.com/2017/10/09/optimizing-opencv-on-the-raspberry-pi/)

@@ -3,5 +3,5 @@
 
 import rcdrive as rc;
 
-rc.drive(display=False);
-# rc.stop();
+rc.drive(detectLanes=True, resolution=(80,64));
+rc.stop();

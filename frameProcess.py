@@ -213,8 +213,8 @@ class frameProcessObj:
 		if (debug):
 			cv2.imwrite(debug_dir + "/edges.png", edges);
 
-		contour = self.detectLanes_contour(frame, edges, debug);
-		return contour;
+		# contour = self.detectLanes_contour(frame, edges, debug);
+		return edges;
 
 	# Detects the lane using colour
 	# Assumes frame is colour

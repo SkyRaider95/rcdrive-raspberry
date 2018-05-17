@@ -19,21 +19,39 @@ import cv2;
 import csv;
 
 eventLoop = True;
-forwardSpd = 180;
+forwardSpd = 190;
 turningSpd = MAX_SPEED;
 char = "";
 
 # Main running program for the car
 def drive(usePiCamera=True, resolution=(1648, 1232), fps=30, display=False, detectLanes=False):
+	# Initialise constants
+	DRIVE_LEFT = 0;
+	DRIVE_STRAIGHT = 1;
+	DRIVE_RIGHT = 2;
+	DRIVE_STOP = 3;
+
 	# Initalise variables
 	counter = 1;
 	global eventLoop, forwardSpd, turningSpd, char;
 	eventLoop = True;
 	char = "";
 	output_dir = "output";
+	filename_counter = 1;
+	inputSteer = [0, 0, 0]; # No stopping input
+
+	# Initialise training data
+	training_filename = "training_data.npy";
+
+	if os.path.isfile(training_filename):
+		print('File exists, loading previous data!');
+		training_data = list(np.load(training_filename));
+	else:
+		print('File does not exist, starting fresh!');
+		training_data = [];
 
 	# Initialise frameProcessObj
-	rccamera = fp("rc-camera", "rc-camera.output", fp.FRAME_PROCESS_STREAM_CAMERA, resolution, max_fps=fps);
+	rccamera = fp("rc-camera", "rc-camera.output", fp.FRAME_PROCESS_STREAM_CAMERA, resolution, max_fps=fps, only_lower=False);
 
 	# Initialise to write to file
 	if (not os.path.exists(output_dir)):
@@ -55,7 +73,6 @@ def drive(usePiCamera=True, resolution=(1648, 1232), fps=30, display=False, dete
 
 	# Initialise keyboard thread
 	keyboardThread = Thread(target=keyboardLoop, args = ());
-	keyboardThread.daemon = True;
 
 	# Initialize the video stream
 	camera = piStream(name="PiCamera", resolution=resolution, fps=fps);
@@ -63,19 +80,18 @@ def drive(usePiCamera=True, resolution=(1648, 1232), fps=30, display=False, dete
 	# Begin driving
 	camera.start();
 	keyboardThread.start();
-	print("Begin drive")
+	print("Begin drive");
 	
-	# Event loop
-	while (eventLoop or camera.more()):
+	# Writing frames
+	while (eventLoop):
 		# Grabbing frame from the video and perform processing
 		(frame, counter) = camera.read();
 
-		if (detectLanes):
-			frame = rccamera.detectLanesFrame(frame);
+		if (frame is None):
+			break;
 
-		# if (display):
-		# 	displayThread = Thread(target=showFrame, args = ());
-		# 	displayThread.start();
+		if (detectLanes):
+			detectedLane = rccamera.detectLanesFrame(frame);
 
 		# Getting the timestamp on the frame
 		timestamp = datetime.datetime.now();
@@ -86,35 +102,52 @@ def drive(usePiCamera=True, resolution=(1648, 1232), fps=30, display=False, dete
 		if (counter == 1):
 			csvwriter.writerow({'frameName': frameName, 'frame': str(counter), 'timestamp': ts, 'kb_input': str(char)});
 
+		inputSteer = [0, 0, 0]; # No stopping input
 		# Keyboard Input
 		if (char != ""):
+			if (char == "w"):
+				inputSteer[DRIVE_STRAIGHT] = 1;
+			elif (char == "a"):
+				inputSteer[DRIVE_LEFT] = 1;
+			elif (char == "d"):
+				inputSteer[DRIVE_RIGHT] = 1;
+
+			# Exporting training data if there are valid inputs
+			if (inputSteer != [0,0,0]):
+				if (detectLanes):
+					training_data.append([detectedLane, inputSteer]);
+				else:
+					training_data.append([frame, inputSteer]);
+
+				# Saves after 100 entries
+				if (len(training_data) % 100 == 0):
+					np.save(training_filename, training_data);
+
 			# Exit the program next loop
 			if (char == "x"):
 				motors.setSpeeds(0, 0);
 				eventLoop = False;
+				print("End drive");
 				camera.stop();
+				char = "";
+				np.save(training_filename, training_data);
 
 			# Write to csv file
-			# print('At frame ' + str(counter) + ', writing to file: ' + str(char) + '\n');
 			csvwriter.writerow({'frameName': frameName, 'frame': str(counter), 'timestamp': ts, 'kb_input': str(char)});
 
-		# else:
-		# 	# motors.setSpeeds(0, 0);
-		# 	motors.motor1.setSpeed(0);
-
 		# Saving the frame
-		outputFrame(frameName, frame, output_dir);
-		# cv2.imwrite(output_dir + "/" + frameName +'.png', frame);
+		outputFrame(frameName, frame, str(output_dir + '/frames'));
 		# out.write(frame);
+		if (detectLanes):
+			outputFrame(frameName + 'edge', detectedLane, str(output_dir + '/frames_edges'));
 
 	# Closing Program
 	camera.stats();
-	motors.setSpeeds(0, 0);
 	cv2.destroyAllWindows();
 	# out.release();
 	csvfile.close();
 	keyboardThread.join();
-
+	motors.setSpeeds(0, 0);
 	print("End of drive");
 
 def stop():
@@ -146,6 +179,10 @@ def keyboardLoop():
 		# Turning Right
 		elif char == "d":
 			motors.motor1.setSpeed(-turningSpd);
+		# Stop
+		elif char == "s":
+			motors.motor2.setSpeed(0);
+			char = "";
 
 		# Exit
 		if char == "x":
@@ -153,7 +190,6 @@ def keyboardLoop():
 			break;
 		
 	print("Ending keyboardLoop");
-	return;
 
 def getch():
     fd = sys.stdin.fileno()
@@ -164,9 +200,3 @@ def getch():
     finally:
         termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
     return ch
-
-# def showFrame():
-# 	global eventLoop, forwardSpd, turningSpd, char, frame;
-
-# 	cv2.imshow(frame);
-# 	cv2.waitKey(1);
