@@ -19,7 +19,7 @@ import cv2;
 import csv;
 
 eventLoop = True;
-forwardSpd = 190;
+forwardSpd = 190; # adjust accordingly
 turningSpd = MAX_SPEED;
 char = "";
 
@@ -46,6 +46,7 @@ def drive(usePiCamera=True, resolution=(1648, 1232), fps=30, display=False, dete
 	if os.path.isfile(training_filename):
 		print('File exists, loading previous data!');
 		training_data = list(np.load(training_filename));
+		print("Number of entries on file: " + str(len(training_data)));
 	else:
 		print('File does not exist, starting fresh!');
 		training_data = [];
@@ -61,10 +62,14 @@ def drive(usePiCamera=True, resolution=(1648, 1232), fps=30, display=False, dete
 	# out = cv2.VideoWriter(output_dir + "/" + 'output.avi', fourcc, fps, resolution);
 
 	# Initialise opencv file
-	csvfile = open(output_dir + "/" + 'keyboard.csv', 'w');
 	fieldnames = ['frameName', 'frame', 'timestamp', 'kb_input'];
-	csvwriter = csv.DictWriter(csvfile, fieldnames=fieldnames);
-	csvwriter.writeheader();
+	if os.path.isfile(output_dir + "/" + 'keyboard.csv'):
+		csvfile = open(output_dir + "/" + 'keyboard.csv', 'a');
+		csvwriter = csv.DictWriter(csvfile, fieldnames=fieldnames);
+	else:
+		csvfile = open(output_dir + "/" + 'keyboard.csv', 'w');
+		csvwriter = csv.DictWriter(csvfile, fieldnames=fieldnames);
+		csvwriter.writeheader();
 
 	# Initialise motors
 	# Assume motor1 is lateral (turning or yaw)
