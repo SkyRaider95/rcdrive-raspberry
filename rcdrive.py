@@ -19,7 +19,7 @@ import cv2;
 import csv;
 
 eventLoop = True;
-forwardSpd = 190; # adjust accordingly
+forwardSpd = 280; # adjust accordingly
 turningSpd = MAX_SPEED;
 char = "";
 
@@ -181,9 +181,11 @@ def keyboardLoop():
 		# Turning Left
 		if char == "a":
 			motors.motor1.setSpeed(turningSpd);
+			motors.motor2.setSpeed(forwardSpd + 20);
 		# Turning Right
 		elif char == "d":
 			motors.motor1.setSpeed(-turningSpd);
+			motors.motor2.setSpeed(forwardSpd + 20);
 		# Stop
 		elif char == "s":
 			motors.motor2.setSpeed(0);
