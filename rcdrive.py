@@ -52,7 +52,7 @@ def drive(usePiCamera=True, resolution=(1648, 1232), fps=30, display=False, dete
 		training_data = [];
 
 	# Initialise frameProcessObj
-	rccamera = fp("rc-camera", "rc-camera.output", fp.FRAME_PROCESS_STREAM_CAMERA, resolution, max_fps=fps, only_lower=False);
+	rccamera = fp("rc-camera", "rc-camera.output", fp.FRAME_PROCESS_STREAM_CAMERA, resolution, max_fps=fps, only_lower=True);
 
 	# Initialise to write to file
 	if (not os.path.exists(output_dir)):

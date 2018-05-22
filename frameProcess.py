@@ -209,12 +209,12 @@ class frameProcessObj:
 		canny = self.detectLanes_frameCanny(frame, debug);
 
 		# edges = colour + canny;
-		edges = canny;
+		# edges = canny;
 		if (debug):
 			cv2.imwrite(debug_dir + "/edges.png", edges);
 
 		# contour = self.detectLanes_contour(frame, edges, debug);
-		return edges;
+		return canny;
 
 	# Detects the lane using colour
 	# Assumes frame is colour
