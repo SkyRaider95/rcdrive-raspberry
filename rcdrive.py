@@ -23,7 +23,15 @@ forwardSpd = 280; # adjust accordingly
 turningSpd = MAX_SPEED;
 char = "";
 
-# Main running program for the car
+### Function: drive
+## Main running program for the car
+#
+## INPUT
+# usePiCamera: True when using the Raspberry Pi camera. False if otherwise. Defaults to True
+# resolution: Resolution of the image frame. Defaults to 1648x1232.
+# fps: Specifies fps for saving to the video output and expected from the camera. Defaults to 30
+# display: Displays to screen if True. Defaults to False
+# detectLanes: Attempts to detect lanes from the camera if True. Defaults to False.
 def drive(usePiCamera=True, resolution=(1648, 1232), fps=30, display=False, detectLanes=False):
 	# Initialise constants
 	DRIVE_LEFT = 0;
@@ -38,11 +46,10 @@ def drive(usePiCamera=True, resolution=(1648, 1232), fps=30, display=False, dete
 	char = "";
 	output_dir = "output";
 	filename_counter = 1;
-	inputSteer = [0, 0, 0]; # No stopping input
+	inputSteer = [0, 0, 0]; # No stopping input variable
 
 	# Initialise training data
 	training_filename = "training_data.npy";
-
 	if os.path.isfile(training_filename):
 		print('File exists, loading previous data!');
 		training_data = list(np.load(training_filename));
@@ -155,13 +162,16 @@ def drive(usePiCamera=True, resolution=(1648, 1232), fps=30, display=False, dete
 	motors.setSpeeds(0, 0);
 	print("End of drive");
 
+### Function: stop()
+# Stops the car entirely (just in case)
 def stop():
 	global eventLoop, forwardSpd, turningSpd, char;
 	char = "x";
 	eventLoop = False;
 	motors.setSpeeds(0, 0);
 
-# Get the keyboard input
+### Function: keyboardLoop()
+## Get the keyboard input. Sets the motor speed accordingly.
 def keyboardLoop():
 	# Initialise all variables
 	global eventLoop, forwardSpd, turningSpd, char;
@@ -190,6 +200,10 @@ def keyboardLoop():
 		elif char == "s":
 			motors.motor2.setSpeed(0);
 			char = "";
+		# Self-Driving Mode. Initially starts from a straight
+		elif char == "g":
+			motors.motor2.setSpeed(forwardSpd);
+			motors.motor1.setSpeed(0);
 
 		# Exit
 		if char == "x":
@@ -198,6 +212,8 @@ def keyboardLoop():
 		
 	print("Ending keyboardLoop");
 
+### Function: getch()
+## Gets the cahr from the keyboard
 def getch():
     fd = sys.stdin.fileno()
     old_settings = termios.tcgetattr(fd)
