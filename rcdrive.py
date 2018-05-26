@@ -19,7 +19,7 @@ import cv2;
 import csv;
 
 eventLoop = True;
-forwardSpd = 280; # adjust accordingly
+forwardSpd = 290; # adjust accordingly
 turningSpd = MAX_SPEED;
 char = "";
 
@@ -32,7 +32,7 @@ char = "";
 # fps: Specifies fps for saving to the video output and expected from the camera. Defaults to 30
 # display: Displays to screen if True. Defaults to False
 # detectLanes: Attempts to detect lanes from the camera if True. Defaults to False.
-def drive(usePiCamera=True, resolution=(1648, 1232), fps=30, display=False, detectLanes=False):
+def drive(usePiCamera=True, resolution=(1648, 1232), fps=30, display=False, detectLanes=False, flip=False):
 	# Initialise constants
 	DRIVE_LEFT = 0;
 	DRIVE_STRAIGHT = 1;
@@ -102,6 +102,12 @@ def drive(usePiCamera=True, resolution=(1648, 1232), fps=30, display=False, dete
 		if (frame is None):
 			break;
 
+		# Rotate the camera
+		if (flip):
+			frame = cv2.flip(frame,0);
+			frame = cv2.flip(frame,1);
+
+		# Detects the lanes
 		if (detectLanes):
 			detectedLane = rccamera.detectLanesFrame(frame);
 

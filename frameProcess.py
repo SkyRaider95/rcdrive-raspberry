@@ -36,30 +36,6 @@ class frameProcessObj:
 		self.MAX_FPS = max_fps;
 		self.ONLY_LOWER = only_lower;
 
-	# User manually sets desired ROI
-	def ROI_crop(self, frame):
-		s = cv2.selectROI(frame);
-		r = [0, 0, 0, 0];
-		cv2.destroyAllWindows();
-
-		# Must be even numbers
-		for x in range(0,3):
-			print(str(x));
-			r[x] = s[x] + s[x] % 2;
-
-		top_left = (int(r[0]), int(r[1]));
-		bottom_left =  (int(r[0]), int(r[3]));
-		bottom_right = (int(r[2]), int(r[3]));
-		top_right = (int(r[2]), int(r[1]));
-		self.setROI_vertices(top_left, bottom_left, bottom_right, top_right);
-
-	# Sets the Region of Interest vertices
-	# It will isolate your region of interest in a trapezoid shape (possible to be a rectangle/square)
-	# Assumes all values are correct
-	def setROI_vertices(self, top_left, bottom_left, bottom_right, top_right):
-		self.ROI_VERTICES = (top_left, bottom_left, bottom_right, top_right);
-		self.USE_ROI_VERTICES = True;
-
 	# Sets the max fps for the output video
 	def setMaxFPS(self, max_fps):
 		self.MAX_FPS = max_fps;
@@ -184,19 +160,10 @@ class frameProcessObj:
 		(height, width, size) = original.shape;
 		frame = copy.deepcopy(original);
 
-		# Getting ROI
+		# Getting ROI by cropping in half
 		if (self.ONLY_LOWER):
-			frame = original[round(height/2):height, 0:width];
-
-		if (self.CROP):
-			self.ROI_crop(frame);
-			self.CROP = False;
-			height, width, channels = frame.shape;
-			self.RESOLUTION = (width, height);
-
-		if (self.USE_ROI_VERTICES):
-			top_left, bottom_left, bottom_right, top_right = self.ROI_VERTICES;
-			frame = frame[top_left[1]:top_left[1] + bottom_right[1], top_left[0]:top_left[0] + bottom_right[0]];
+			frame = frame[round(height/2):height, 0:width];
+			# frame = frame[10:height, 0:width];
 
 		if (debug):
 			if (not os.path.exists(debug_dir)):
@@ -244,6 +211,8 @@ class frameProcessObj:
 			rgb = cv2.bitwise_and(tempFrame, tempFrame, mask = mask);
 
 			if (debug):
+				if (not os.path.exists(debug_dir)):
+					os.makedirs(debug_dir);
 				cv2.imwrite(debug_dir + "/rgb_colour" + str(counter) + ".png", rgb);
 			counter += 1;
 			output = rgb;
@@ -298,11 +267,13 @@ class frameProcessObj:
 		grey = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY);
 
 		if (debug):
+			if (not os.path.exists(debug_dir)):
+				os.makedirs(debug_dir);
 			cv2.imwrite(debug_dir + "/grey.png", grey);
 
 		# Smoothing the image
 		canny = copy.deepcopy(grey);
-		# canny = cv2.medianBlur(canny, 3);
+		canny = cv2.medianBlur(canny, 3);
 		canny = cv2.GaussianBlur(canny,(7, 7), 0);
 
 		if (debug):
@@ -310,6 +281,8 @@ class frameProcessObj:
 		
 		# Applying canny
 		canny = imutils.auto_canny(canny);
+		# canny = cv2.Canny(canny, 70, 125);
+	
 
 		if (debug):
 			cv2.imwrite(debug_dir + "/canny.png", canny);
@@ -331,6 +304,8 @@ class frameProcessObj:
 		cv2.drawContours(tempFrame, contours, -1, (0,255,0), 3); # Draws all the contours
 
 		if (debug):
+			if (not os.path.exists(debug_dir)):
+				os.makedirs(debug_dir);
 			cv2.imwrite(debug_dir + "/contour_edges.png", tempFrame);
 
 		# Approximate shape from contours
