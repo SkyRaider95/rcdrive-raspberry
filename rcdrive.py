@@ -19,7 +19,8 @@ import cv2;
 import csv;
 
 eventLoop = True;
-forwardSpd = 290; # adjust accordingly
+motorSpd = [400, 20, 50, 100, 130, 170, 200, 240, 280, 340]; # Ranges of speed. Arranged according to keyboard layout
+forwardSpd = 240; # Default speed
 turningSpd = MAX_SPEED;
 char = "";
 
@@ -181,13 +182,19 @@ def stop():
 def keyboardLoop():
 	# Initialise all variables
 	global eventLoop, forwardSpd, turningSpd, char;
-
 	char = "";
+	print("Setting speed to :" + str(forwardSpd));
 
 	print("Beginning keyboard loop");
 	while (eventLoop and char != "x"):
 		# Getting Keyboard
 		char = getch();
+
+		# Adjust speed
+		if (str.isnumeric(char)):
+			forwardSpd = motorSpd[int((char))];
+			char = "";
+			print("Setting speed to :" + str(forwardSpd));
 
 		# Straight
 		if (char == "w"):
