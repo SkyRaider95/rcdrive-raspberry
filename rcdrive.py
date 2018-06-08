@@ -19,7 +19,7 @@ import cv2;
 import csv;
 
 eventLoop = True;
-motorSpd = [400, 20, 50, 100, 130, 170, 200, 240, 280, 340]; # Ranges of speed. Arranged according to keyboard layout
+motorSpd = [MAX_SPEED, 100, 140, 160, 180, 200, 240, 280, 320, 380]; # Ranges of speed. Arranged according to keyboard layout
 forwardSpd = 240; # Default speed
 turningSpd = MAX_SPEED;
 char = "";
@@ -184,11 +184,13 @@ def keyboardLoop():
 	global eventLoop, forwardSpd, turningSpd, char;
 	char = "";
 	print("Setting speed to :" + str(forwardSpd));
+	print("Speeds should be set when the car is still");
 
 	print("Beginning keyboard loop");
 	while (eventLoop and char != "x"):
 		# Getting Keyboard
 		char = getch();
+		# print(str(char));
 
 		# Adjust speed
 		if (str.isnumeric(char)):
@@ -204,15 +206,14 @@ def keyboardLoop():
 		# Turning Left
 		if char == "a":
 			motors.motor1.setSpeed(turningSpd);
-			motors.motor2.setSpeed(forwardSpd + 20);
 		# Turning Right
 		elif char == "d":
 			motors.motor1.setSpeed(-turningSpd);
-			motors.motor2.setSpeed(forwardSpd + 20);
 		# Stop
 		elif char == "s":
 			motors.motor2.setSpeed(0);
 			char = "";
+			print("Car is idling");
 		# Self-Driving Mode. Initially starts from a straight
 		elif char == "g":
 			motors.motor2.setSpeed(forwardSpd);
