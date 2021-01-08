@@ -1,6 +1,6 @@
 # Summary
 
-The goal of this project is to create a self-driving rc car using Raspbery Pi and a camera. The logic of steering the vehicle is done through TensorFlow on a combination of dashcam footage and iterations of the model.
+The goal of this project is to create a self-driving rc car using Raspbery Pi and a camera. The logic of steering the vehicle is done through TensorFlow on a combination of dashcam footage and iterations of the model. As of Septemeber 2019, this project is considered abandoned and is archived.
 
 # Objective
 
