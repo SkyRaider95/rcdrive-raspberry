@@ -1,5 +1,6 @@
 # import the necessary packages
 from threading import Thread
+import copy;
 import sys
 import cv2
 import os;
@@ -15,7 +16,7 @@ else:
 class outputFrame:
 	def __init__(self, filename, frame, output_dir=""):
 		self.filename = str(filename);
-		self.frame = frame;
+		self.frame = copy.deepcopy(frame);
 		self.output_dir = str(output_dir);
 
 		outputStreamThrd = Thread(target=self.save, args=());
@@ -30,6 +31,10 @@ class outputFrame:
 			frameName = self.output_dir + "/" + self.filename + '.png';
 		else:
 			frameName = self.filename + '.png';
+
+		if (self.frame is None):
+			print("ERROR! The frame does not exist!");
+			return;
 
 		cv2.imwrite(frameName, self.frame);
 		return;

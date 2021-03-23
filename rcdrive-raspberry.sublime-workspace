@@ -1,0 +1,353 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"train",
+				"training_filename"
+			],
+			[
+				"List_",
+				"List_createNode"
+			],
+			[
+				"bbuff_",
+				"bbuff_is_empty"
+			],
+			[
+				"is",
+				"is_integer"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 344.0,
+		"last_filter": "Package Control: ",
+		"selected_items":
+		[
+			[
+				"Package Control: ",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: pac",
+				"Package Control: List Packages"
+			],
+			[
+				"pack",
+				"Package Control: Install Package"
+			],
+			[
+				"Git",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 432.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+	],
+	"file_history":
+	[
+		"/C/Users/Jin-Desktop/Documents/Projects/rcdrive-raspberry/rcdrive2.py",
+		"/C/Users/Jin-Desktop/Documents/Projects/rcdrive-raspberry/rcdrive.py",
+		"/C/Users/Jin-Desktop/Documents/Projects/rcdrive-raspberry/outputProcess.py",
+		"/C/Users/Jin-Desktop/Documents/Projects/rcdrive-raspberry/frameProcess.py",
+		"/C/Users/Jin-Desktop/Documents/Projects/rcdrive-raspberry/main.py",
+		"/C/Users/Jin-Desktop/Desktop/newsletter.html",
+		"/C/MAMP/htdocs/ESSS Website/index.php",
+		"/C/Users/Jin-Desktop/Desktop/newsletter1.html",
+		"/C/Users/Jin-Desktop/Downloads/Adobe Photoshop CS6 13.0 Final (English Japanese)  Mac Os X [ChingLiu]/How to install.txt",
+		"/C/Users/Jin-Desktop/Downloads/ENSC 470 Lab 2 Data-20161117T234505Z/ENSC 470 Lab 2 Data/Group 10.rar",
+		"/C/Program Files (x86)/Origin Games/The Sims 2 Ultimate Collection/Fun with Pets/SP9/TSData/Res/Config/Graphics Rules.sgr",
+		"/C/Users/Jin-Desktop/Documents/Projects/rcdrive-raspberry/view_data.py",
+		"/C/Users/Jin-Desktop/Google Drive/Self Driving Car/Scripts/reduce_data.py",
+		"/C/Users/Jin-Desktop/Documents/Projects/rcdrive-raspberry/piStream.py",
+		"/C/Users/Jin-Desktop/Documents/Projects/rcdrive-raspberry/processFrame.py",
+		"/C/Users/Jin-Desktop/Downloads/LogitechSteeringWheelSDK_8.75.30/ReadMe.txt",
+		"/I/My Games/My Computer Game Save Files/The Sims 2/ContentRegistry",
+		"/C/Users/Jin-Desktop/Documents/EA Games/The Sims™ 2 Ultimate Collection/Config/userProps.xml",
+		"/I/My Games/My Computer Game Save Files/The Sims 2/Config/userProps.xml",
+		"/C/Users/Jin-Desktop/Desktop/additional_info.txt",
+		"/C/Users/Jin-Desktop/Google Drive/Self Driving Car/Scripts/alexnet.py",
+		"/C/Users/Jin-Desktop/Documents/Projects/rcdrive-raspberry/README.md",
+		"/C/Users/Jin-Desktop/Desktop/Tensorflow/tf.py",
+		"/C/Users/Jin-Desktop/Documents/Projects/rcdrive-raspberry/alexnet.py",
+		"/C/Users/Jin-Desktop/Documents/Projects/rcdrive-raspberry/vidcapture.py",
+		"/C/Users/Jin-Desktop/Downloads/Keras_Tensorflow_Windows.txt",
+		"/C/Users/Jin-Desktop/Desktop/Jin's Stuff/settings.php",
+		"/C/Users/Jin-Desktop/Desktop/Jin's Stuff/test.py",
+		"/C/Users/Jin-Desktop/Desktop/Jin's Stuff/generate.py",
+		"/C/MAMP/htdocs/ESSS Website/merch.php",
+		"/C/Users/Jin-Desktop/AppData/Local/Temp/scp55906/public_html/admin/admin.php",
+		"/C/Users/Jin-Desktop/AppData/Local/Temp/scp55624/public_html/admin/login.php",
+		"/C/Users/Jin-Desktop/Downloads/vidcapture.py",
+		"/C/Users/Jin-Desktop/AppData/Local/Temp/f651245f-808f-4b54-8c03-d21ae71e0572.tmp.txt",
+		"/C/Users/Jin-Desktop/Documents/Projects/rcdrive-raspberry/opencv.py",
+		"/C/Users/Jin-Desktop/Documents/Projects/rcdrive-raspberry/UnicodeCSV.py",
+		"/C/Users/Jin-Desktop/Documents/Projects/rcdrive-raspberry/debug.py",
+		"/C/Users/Jin-Desktop/Documents/Projects/rcdrive-raspberry/data-processing/source/dc_frameProcess.py",
+		"/C/Users/Jin-Desktop/Downloads/3.5inch LCD Module/3.5inch LCD Module/3.5inch RaspberryPi LCD Module/read me.txt",
+		"/C/Users/Jin-Desktop/OneDrive/Projects/Driving/video_edgedetection.py",
+		"/C/Users/Jin-Desktop/OneDrive/Projects/Driving/README.txt",
+		"/C/Users/Jin-Desktop/Downloads/test.py",
+		"/C/Users/Jin-Desktop/OneDrive/Projects/Driving/test.py",
+		"/C/Users/Jin-Desktop/OneDrive/Projects/Driving/edgedetection.py",
+		"/C/Users/Jin-Desktop/OneDrive/CMPT 300/prj5/ENSC351Part3_Marking_Linux/Ensc351Part3_Marking/src/Medium.cpp",
+		"/C/Users/Jin-Desktop/OneDrive/CMPT 300/prj5/ENSC351Part3_Marking_Linux/Ensc351Part3_Marking/src/myIO.cpp",
+		"/C/Users/Jin-Desktop/OneDrive/CMPT 300/prj5/deadlocks/Makefile",
+		"/C/Users/Jin-Desktop/OneDrive/CMPT 300/prj5/kallocation/list_sol.c",
+		"/C/Users/Jin-Desktop/OneDrive/CMPT 300/prj5/kallocation/list_sol.h",
+		"/C/Users/Jin-Desktop/OneDrive/CMPT 300/prj5/deadlocks/locking.c",
+		"/C/Program Files/PuTTY/README.txt",
+		"/C/Users/Jin-Desktop/OneDrive/CMPT 300/prj5/kallocation/kallocation.c",
+		"/C/Users/Jin-Desktop/OneDrive/CMPT 300/prj5/deadlocks/list_sol.h",
+		"/C/Users/Jin-Desktop/OneDrive/CMPT 300/prj5/deadlocks/list_sol.c",
+		"/C/Users/Jin-Desktop/OneDrive/CMPT 300/prj5/deadlocks/locking.h",
+		"/C/Users/Jin-Desktop/OneDrive/CMPT 300/prj5/ENSC351Part3_Marking_Linux/Ensc351Part3_Marking/src/myIO.h",
+		"/C/Users/Jin-Desktop/OneDrive/CMPT 300/prj5/ENSC351Part3_Marking_Linux/Ensc351Part3_Marking/src/ReceiverSS.cpp",
+		"/C/Users/Jin-Desktop/OneDrive/CMPT 300/prj5/ENSC351Part3_Marking_Linux/Ensc351Part3_Marking/src/SenderX.cpp",
+		"/C/Users/Jin-Desktop/OneDrive/CMPT 300/prj5/ENSC351Part3_Marking_Linux/Ensc351Part3_Marking/src/ReceiverX.h",
+		"/C/Users/Jin-Desktop/OneDrive/CMPT 300/prj5/kallocation/Makefile",
+		"/C/Users/Jin-Desktop/OneDrive/CMPT 300/prj5/kallocation/kallocation.h",
+		"/C/Users/Jin-Desktop/OneDrive/CMPT 300/prj4/Makefile",
+		"/C/Users/Jin-Desktop/OneDrive/CMPT 300/prj5/kallocation/main.c",
+		"/C/Users/Jin-Desktop/OneDrive/CMPT 300/prj3/Makefile",
+		"/C/Users/Jin-Desktop/OneDrive/CMPT 300/prj4/main.c",
+		"/C/Users/Jin-Desktop/OneDrive/CMPT 300/Problem Set #5/Makefile",
+		"/C/Users/Jin-Desktop/OneDrive/CMPT 300/Problem Set #5/ps5.c",
+		"/C/Linux/linux-stable/scripts/sortextable.c",
+		"/C/Linux/linux-stable/scripts/sortextable.h",
+		"/C/Linux/linux-stable/scripts/link-vmlinux.sh",
+		"/C/Linux/linux_v4.13.0/linux_v4.13.9/Makefile",
+		"/C/Linux/linux_v4.13.0/linux_v4.13.9/arch/x86/entry/syscalls/syscall_64.tbl",
+		"/C/Users/Jin-Desktop/OneDrive/CMPT 300/Problem Set #5/main.c",
+		"/C/Linux/linux_v4.13.0/linux_v4.13.9/cs300/cs300_test.c",
+		"/C/Linux/linux_v4.13.0/linux_v4.13.9/cs300/Makefile",
+		"/C/Users/Jin-Desktop/OneDrive/CMPT 300/prj4/process_ancestors.c",
+		"/C/Users/Jin-Desktop/OneDrive/CMPT 300/prj4/process_ancestors.h",
+		"/C/Users/Jin-Desktop/OneDrive/CMPT 300/prj4/array_stats.c",
+		"/C/Users/Jin-Desktop/OneDrive/CMPT 300/prj4/array_stats.h",
+		"/C/Linux/linux_v4.13.0/linux_v4.13.9/cs300/New Text Document.txt",
+		"/C/Users/Jin-Desktop/OneDrive/CMPT 300/prj4/linux_v4.13.0/main.c",
+		"/C/Users/Jin-Desktop/OneDrive/CMPT 300/Problem Set #4/virtual-memory.c",
+		"/C/Users/Jin-Desktop/OneDrive/CMPT 300/prj3/README.txt",
+		"/C/Users/Jin-Desktop/OneDrive/CMPT 300/prj3/candykids.c",
+		"/C/Users/Jin-Desktop/OneDrive/CMPT 300/prj3/bbuff.c",
+		"/C/Users/Jin-Desktop/OneDrive/CMPT 300/prj3/bbuff.h",
+		"/C/Users/Jin-Desktop/OneDrive/CMPT 300/prj3/stats.c",
+		"/C/Users/Jin-Desktop/OneDrive/CMPT 300/prj3/Producer-Consumer---C-Source-Code-master/stats.c",
+		"/C/Users/Jin-Desktop/OneDrive/CMPT 300/prj3/Producer-Consumer---C-Source-Code-master/candykids.c",
+		"/C/Users/Jin-Desktop/OneDrive/CMPT 300/prj3/Producer-Consumer---C-Source-Code-master/bbuff.c",
+		"/C/Users/Jin-Desktop/OneDrive/CMPT 300/prj3/Producer-Consumer---C-Source-Code-master/Makefile",
+		"/C/Users/Jin-Desktop/OneDrive/CMPT 300/prj3/SampleOutputs/Makefile.txt",
+		"/C/Users/Jin-Desktop/OneDrive/CMPT 300/prj2/shell.c",
+		"/C/Users/Jin-Desktop/OneDrive/CMPT 300/prj2/Makefile",
+		"/C/Users/Jin-Desktop/OneDrive/CMPT 300/prj3/stats.h",
+		"/C/Users/Jin-Desktop/OneDrive/CMPT 300/prj1/list/test_list.c",
+		"/C/Users/Jin-Desktop/OneDrive/CMPT 300/prj1/list/list.c",
+		"/C/Users/Jin-Desktop/OneDrive/CMPT 300/prj1/mystring/test_mystring.c",
+		"/C/Users/Jin-Desktop/Downloads/shell.c",
+		"/C/Users/Jin-Desktop/OneDrive/CMPT 300/prj2/helloworld.c",
+		"/C/Users/Jin-Desktop/Downloads/prj1_sol/prj1_sol/mystring/mystring_sol.c",
+		"/C/Users/Jin-Desktop/OneDrive/CMPT 300/prj2/mystring.h",
+		"/C/Users/Jin-Desktop/OneDrive/CMPT 300/prj2/mystring.c",
+		"/C/Users/Jin-Desktop/OneDrive/CMPT 300/prj1/mystring/mystring.c",
+		"/C/Users/Jin-Desktop/OneDrive/CMPT 300/prj1/mystring/mystring.h",
+		"/C/Users/Jin-Desktop/OneDrive/CMPT 300/Problem Set #2/fibonacci.c",
+		"/C/Users/Jin-Desktop/OneDrive/CMPT 300/Problem Set #2/measureSystemCall.c",
+		"/C/Users/Jin-Desktop/OneDrive/CMPT 300/Problem Set #2/Makefile",
+		"/C/Users/Jin-Desktop/OneDrive/CMPT 300/Problem Set #2/systemCall.makefile",
+		"/Users/ng/OneDrive/CMPT 300/prj1/mystring/test_mystring",
+		"/C/Users/Jin-Desktop/OneDrive/CMPT 300/Problem Set #1/pointer.c",
+		"/C/Users/Jin-Desktop/Downloads/CMPT 300/CMPT 300/Assignment_1/Commands.txt",
+		"/C/Users/Jin-Desktop/Downloads/CMPT 300/CMPT 300/Assignment_1/gcc_and_gdb.txt",
+		"/C/Users/Jin-Desktop/OneDrive/CMPT 300/Problem Set #1/ps1.txt",
+		"/C/Program Files (x86)/Steam/steamapps/common/The Sims 3/Mods/Packages/awesome/rtfm.txt",
+		"/C/Program Files (x86)/Steam/steamapps/common/The Sims 3/Mods/Files/DDFMap.txt",
+		"/C/Users/Jin-Desktop/Downloads/awesome/rtfm.txt",
+		"/C/Users/Jin-Desktop/Documents/Visual Studio 2015/Projects/video_compress/video_compress/.gitignore",
+		"/C/MAMP/htdocs/bus_proj/SQL_test_cases.txt",
+		"/C/MAMP/htdocs/bus_proj/ywib_student_input_jin.php",
+		"/C/MAMP/htdocs/bus_proj/show_tables.php",
+		"/C/MAMP/htdocs/bus_proj/show_tables",
+		"/C/MAMP/htdocs/bus_proj/ywib_student_input.php",
+		"/C/MAMP/htdocs/bus_proj/ywib_student_input_3.php",
+		"/C/Users/Jin-Desktop/Downloads/myIO_latest (1).txt",
+		"/C/Users/Jin-Desktop/Downloads/myIO_latest.txt",
+		"/C/Users/Jin-Desktop/Downloads/ESSS General Survey 2017.csv/ESSS General Survey 2017.csv",
+		"/C/Users/Jin-Desktop/Desktop/huff_dec_win.c"
+	],
+	"find":
+	{
+		"height": 24.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"debug",
+			"self",
+			"car",
+			"counter",
+			"a",
+			"output_dir",
+			"print(",
+			"));\n",
+			"thread",
+			"0",
+			"();\n",
+			"debug",
+			"streamObj",
+			"RESOLUTION"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 24.0
+	},
+	"input":
+	{
+		"height": 36.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.SublimeLinter":
+	{
+		"height": 0.0
+	},
+	"output.SublimeLinter Messages":
+	{
+		"height": 96.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"output.mdpopups":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "rcdrive-raspberry.sublime-project",
+	"replace":
+	{
+		"height": 44.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 173.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
